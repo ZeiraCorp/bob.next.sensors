@@ -57,9 +57,9 @@ class Led:
     self.switchOn()
     time.sleep(delay)
     self.switchOff()  
-    time.sleep(delay)
-    self.switchOn()
-    time.sleep(delay)    
+    #time.sleep(delay)
+    #self.switchOn()
+    #time.sleep(delay)
     return self
 
 # === LightSensor ===

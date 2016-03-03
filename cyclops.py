@@ -15,13 +15,14 @@ display = LCDDisplay().initialize({
   'message': "BOB|->Next()"
 })
 
-blueLed = Led().initialize({
-  'name': "blueLed",
+whiteLed = Led().initialize({
+  'name': "whiteLed",
   'digitalPort':2, 
   'pinMode':"OUTPUT"
 })
 
-blueLed.switchOn()
+#whiteLed.switchOn()
+whiteLed.blinkOnce(0.5)
 
 # distance
 ultrasonicRanger = UltrasonicRanger().initialize({
@@ -36,7 +37,9 @@ buzzer = Buzzer().initialize({
 })
 
 
-mqttc = mqtt.Client()
+#mqttc = mqtt.Client()
+mqttc = mqtt.Client(client_id="SensorsModule", clean_session=True, userdata=None, protocol="MQTTv311")
+
 
 display.setText("Hi! This is bob.next() :)").blue()
 
@@ -64,29 +67,20 @@ def on_connect(client, userdata, rc):
   # Subscribing in on_connect() means that if we lose the connection and
   # reconnect then subscriptions will be renewed.
   client.subscribe("orders/")
-
-def yo():
-  blueLed.blinkOnce(0.5)
-
-def hi():
-  print("...\n")
+  client.subscribe("motion/meepmeep")
 
 def on_message(client, userdata, msg):
   infos = json.loads(msg.payload)
 
-  t = Thread(target=yo)
-  t.start()
-
   display.setText(
-        msg.topic+":"+ str(infos["cmd"])
+        msg.topic+":"+ str(infos["action"])
     ).cyan().console()
+  whiteLed.blinkOnce(1)
+  buzzer.buzz(1)
 
 def startMQTTCli():
   mqttc.on_connect = on_connect
   mqttc.on_message = on_message
-
-  #display.setText("Please wait ...").cyan()
-  #time.sleep(10) #wait for the broker
 
   mqttc.connect("zeiracorp.local", 1883, 60)
   

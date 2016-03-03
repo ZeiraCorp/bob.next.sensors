@@ -11,4 +11,5 @@
 
 - hostname of the "sensors"/GrovePI RPI : `cyclops.local` => `ssh pi@cyclops.local`
 - broker: `zeira.corp`
-- run sensors module: `...`
+- run sensors module: `./cyclops.sh`
+- `yo.js` -> only at startup: "say yo to the broker!"
